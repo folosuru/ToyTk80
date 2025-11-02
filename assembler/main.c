@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
         if (strcmp("-start", argv[i]) == 0) {
             if (i + 1 < argc) {
                 i++;
-                sscanf_s(argv[i], "%x", &flags.start_address);
+                sscanf(argv[i], "%x", &flags.start_address);
             }
             continue;
         }
@@ -65,12 +65,12 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
 
-    fopen_s(&file, filename, "r");
+    file = fopen(filename, "r");
     int size;
     char* buf = loadFile(file, &size);
 
     if (output_name != NULL) {
-        fopen_s(&flags.out, output_name, "w");
+        flags.out = fopen(output_name, "w");
     } else {
         flags.out = stdout;
     }

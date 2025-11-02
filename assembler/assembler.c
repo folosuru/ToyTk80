@@ -1,12 +1,12 @@
 #include "assembler.h"
 
 #include <ctype.h>
+#include <limits.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 
 #define ARRAY_SIZEOF(arr) sizeof(arr) / sizeof(arr[0])
 
@@ -131,10 +131,10 @@ static int parse_number(struct seeking_text* text) {
     memcpy(buffer, start, len);
     buffer[len] = '\0';
     if (*(text->current) == 'H' || *(text->current) == 'h') {
-        sscanf_s(buffer, "%x", &data);
+        sscanf(buffer, "%x", &data);
         (text->current)++;
     } else {
-        sscanf_s(buffer, "%d", &data);
+        sscanf(buffer, "%d", &data);
         if (may_hex) {
             text->current = start;
             return -1;
@@ -299,7 +299,7 @@ static ASM_Opcode* tryCreateOperand(const char* name, int name_len, struct seeki
         operand_text++;
     }
     skip_whitespace(text);
-    if ( ( !skip_return(text) && *text->current != '\0') || *operand_text != '\0') {
+    if ((!skip_return(text) && *text->current != '\0') || *operand_text != '\0') {
         goto wrong_end;
     }
 

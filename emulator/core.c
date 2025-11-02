@@ -1,10 +1,14 @@
 
-#include <synchapi.h>
+#include <stdlib.h>
 #include <unistd.h>
-
+#ifdef WIN32
+#include <synchapi.h>
+#define sleep(s) Sleep(s)
+#else
+#define sleep(s) usleep(s)
+#endif
 #include "curses.h"
 #include "emulator.h"
-
 
 void init_emulator() {
     Context_instance.PC = 0x8000;
@@ -40,6 +44,7 @@ _Noreturn void mainloop() {
         }
     }
 }
+
 void run_loop(const InstructionPtrTable table) {
     while (true) {
         if (wgetch(information_window) == ' ') {
@@ -49,7 +54,7 @@ void run_loop(const InstructionPtrTable table) {
         if (current_PC == 0x00) {  // NOP
             if (!(Context_instance.R & 0xFF)) {
                 print_register_window();
-                Sleep(1);
+                sleep(1);
             }
             Context_instance.PC++;
         } else {

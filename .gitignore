@@ -3,3 +3,5 @@ build
 artifact
 .vs
 .idea
+
+.cache/
